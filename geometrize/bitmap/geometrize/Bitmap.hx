@@ -129,10 +129,11 @@ class Bitmap {
 		var i:Int = 0;
 		while (i < data.length) {
 			var idx:Int = i * 4;
-			bytes.set(idx, data.get(i).r);
-			bytes.set(idx + 1, data.get(i).g);
-			bytes.set(idx + 2, data.get(i).b);
-			bytes.set(idx + 3, data.get(i).a);
+			var color:Rgba = data.get(i);
+			bytes.set(idx, color.r);
+			bytes.set(idx + 1, color.g);
+			bytes.set(idx + 2, color.b);
+			bytes.set(idx + 3, color.a);
 			i++;
 		}
 		return bytes;

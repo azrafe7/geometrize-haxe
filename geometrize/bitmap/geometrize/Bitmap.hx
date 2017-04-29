@@ -115,11 +115,8 @@ class Bitmap {
 	public inline function fill(color:Rgba):Void {
 		var idx:Int = 0;
 		while (idx < data.length) {
-			data.set(idx, color.r);
-			data.set(idx + 1, color.g);
-			data.set(idx + 2, color.b);
-			data.set(idx + 3, color.a);
-			idx += 4;
+			data.set(idx, color);
+			idx++;
 		}
 	}
 	

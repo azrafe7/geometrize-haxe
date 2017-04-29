@@ -1,6 +1,6 @@
 package geometrize.bitmap.hxPixels;
 
-import haxe.ds.Vector;
+import hxPixels.Pixels;
 import haxe.io.Bytes;
 
 /**
@@ -26,7 +26,7 @@ class Bitmap {
 	/**
 	 * The bitmap data.
 	 */
-	private var data:Vector<Rgba>;
+	private var data:Pixels;
 	
 	/**
 	 * Creates a new bitmap, filled with the given color.
@@ -39,12 +39,8 @@ class Bitmap {
 		var bitmap = new Bitmap();
 		bitmap.width = w;
 		bitmap.height = h;
-		bitmap.data = new Vector<Rgba>(w * h);
-		var i:Int = 0;
-		while (i < bitmap.data.length) {
-			bitmap.data.set(i, color);
-			i++;
-		}
+		bitmap.data = new Pixels(w, h, true);
+    bitmap.fill(color);
 		return bitmap;
 	}
 	
@@ -61,14 +57,7 @@ class Bitmap {
 		Sure.sure(bytes.length == w * h * 4); // Assume 4-byte RGBA8888 pixel format
 		bitmap.width = w;
 		bitmap.height = h;
-		bitmap.data = new Vector(Std.int(bytes.length / 4));
-		var i:Int = 0;
-		var x:Int = 0;
-		while (i < bytes.length) {
-			bitmap.data.set(x, Rgba.create(bytes.get(i), bytes.get(i + 1), bytes.get(i + 2), bytes.get(i + 3)));
-			i += 4;
-			x++;
-		}
+		bitmap.data = Pixels.fromBytes(bytes, w, h);
 		return bitmap;
 	}
 	
@@ -79,7 +68,7 @@ class Bitmap {
 	 * @return	The pixel color value.
 	 */
 	public inline function getPixel(x:Int, y:Int):Rgba {
-		return data.get(width * y + x);
+		return data.getPixel32(x, y);
 	}
 	
 	/**
@@ -89,7 +78,7 @@ class Bitmap {
 	 * @param	color	The color value to set at the given coordinate.
 	 */
 	public inline function setPixel(x:Int, y:Int, color:Rgba):Void {
-		data.set((width * y + x), color);
+		data.setPixel32(x, y, color);
 	}
 	
 	/**
@@ -97,13 +86,11 @@ class Bitmap {
 	 * @return	The deep copy of the bitmap data.
 	 */
 	public inline function clone():Bitmap {
+		trace('clone');
 		var bitmap = new Bitmap();
 		bitmap.width = width;
 		bitmap.height = height;
-		bitmap.data = new Vector(data.length);
-		for (i in 0...data.length) {
-			bitmap.data.set(i, data.get(i));
-		}
+		bitmap.data = this.data.clone();
 		return bitmap;
 	}
 	
@@ -112,14 +99,7 @@ class Bitmap {
 	 * @param	color The color to fill the bitmap with.
 	 */
 	public inline function fill(color:Rgba):Void {
-		var idx:Int = 0;
-		while (idx < data.length) {
-			data.set(idx, color.r);
-			data.set(idx + 1, color.g);
-			data.set(idx + 2, color.b);
-			data.set(idx + 3, color.a);
-			idx += 4;
-		}
+		this.data.fillRect(0, 0, width, height, color);
 	}
 	
 	/**
@@ -127,17 +107,7 @@ class Bitmap {
 	 * @return	The bitmap data.
 	 */
 	public inline function getBytes():Bytes {
-		var bytes:Bytes = Bytes.alloc(data.length * 4);
-		var i:Int = 0;
-		while (i < data.length) {
-			var idx:Int = i * 4;
-			bytes.set(idx, data.get(i).r);
-			bytes.set(idx + 1, data.get(i).g);
-			bytes.set(idx + 2, data.get(i).b);
-			bytes.set(idx + 3, data.get(i).a);
-			i++;
-		}
-		return bytes;
+    return this.data.bytes;
 	}
 	
 	/**

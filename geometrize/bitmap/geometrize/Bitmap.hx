@@ -97,6 +97,7 @@ class Bitmap {
 	 * @return	The deep copy of the bitmap data.
 	 */
 	public inline function clone():Bitmap {
+		trace('clone');
 		var bitmap = new Bitmap();
 		bitmap.width = width;
 		bitmap.height = height;

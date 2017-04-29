@@ -38,7 +38,6 @@ abstract Rgba(Pixel) from Int to Int {
 	 * @param	rgba	The color value. It will be interpreted in RGBA8888 format.
 	 */
 	public inline function new(rgba:Int) {
-    untyped __js__('debugger');
 		this = rgba;
 	}
 	

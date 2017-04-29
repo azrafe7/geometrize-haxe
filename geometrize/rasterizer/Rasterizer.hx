@@ -92,8 +92,8 @@ class Rasterizer {
 	 * @param	y2	y-coordinate of the second point.
 	 * @return	The points on the line x1,y1 to x2,y2
 	 */
-	public static function bresenham(x1:Int, y1:Int, x2:Int, y2:Int):Array<Point> {
-		var points = [];
+	public static function bresenham(x1:Int, y1:Int, x2:Int, y2:Int, ?appendTo:Array<Point>):Array<Point> {
+		var points = (appendTo != null) ? appendTo : [];
 		
 		var dx:Int = x2 - x1;
 		var ix:Int = ((dx > 0) ? 1 : 0) - ((dx < 0) ? 1 : 0);
@@ -103,7 +103,6 @@ class Rasterizer {
 		var iy:Int = ((dy > 0) ? 1 : 0) - ((dy < 0) ? 1 : 0);
 		dy = Util.abs(dy) << 1;
 		
-		var points:Array<{ x:Int, y:Int }> = [];
 		points.push({ x: x1, y: y1 });
 		
 		if (dx >= dy) {
@@ -147,8 +146,7 @@ class Rasterizer {
 		for (i in 0...points.length) {
 			var p1 = points[i];
 			var p2 = (i == (points.length - 1)) ? points[0] : points[i + 1];
-			var p1p2 = bresenham(p1.x, p1.y, p2.x, p2.y);
-			edges = edges.concat(p1p2);
+			bresenham(p1.x, p1.y, p2.x, p2.y, edges);
 		}
 		
 		var yToXs:IntMap<ArraySet<Int>> = new IntMap<ArraySet<Int>>();

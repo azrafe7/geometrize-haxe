@@ -57,9 +57,9 @@ class Core {
 		}
 		
 		// Scale totals down to 0-255 range to get average blended color
-		var r:Int = Util.clamp(Std.int(totalRed / count) >> 8, 0, 255);
-		var g:Int = Util.clamp(Std.int(totalGreen / count) >> 8, 0, 255);
-		var b:Int = Util.clamp(Std.int(totalBlue / count) >> 8, 0, 255);
+		var r:Int = Std.int(totalRed / count) >> 8;
+		var g:Int = Std.int(totalGreen / count) >> 8;
+		var b:Int = Std.int(totalBlue / count) >> 8;
 		
 		return Rgba.create(r, g, b, alpha);
 	}

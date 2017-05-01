@@ -50,7 +50,7 @@ abstract Rgba(Pixel) from Int to Int {
 	 * @return	The new color value in RGBA8888 format.
 	 */
 	public static inline function create(red:Int, green:Int, blue:Int, alpha:Int):Rgba {
-		return (Util.clamp(red, 0, 255) << 24) + (Util.clamp(green, 0, 255) << 16) + (Util.clamp(blue, 0, 255) << 8) + (Util.clamp(alpha, 0, 255));
+		return ((Util.clamp(alpha, 0, 255) << 24) + (Util.clamp(blue, 0, 255) << 16) + (Util.clamp(green, 0, 255) << 8) + (Util.clamp(red, 0, 255)));
 	}
 	
 	/**
@@ -62,16 +62,16 @@ abstract Rgba(Pixel) from Int to Int {
 		return rgba;
 	}
 	
-	private inline function get_r():Int {
-		return this.A;
-	}
-	private inline function get_g():Int {
-		return this.R;
+	private inline function get_a():Int {
+		return this.A; // (this >> 24) & 0xFF;
 	}
 	private inline function get_b():Int {
-		return this.G;
+		return this.R; // (this >> 16) & 0xFF;
 	}
-	private inline function get_a():Int {
-		return this.B;
+	private inline function get_g():Int {
+		return this.G; // (this >> 8) & 0xFF;
+	}
+	private inline function get_r():Int {
+		return this.B; // this & 0xFF;
 	}
 }

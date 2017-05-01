@@ -1,6 +1,7 @@
 package geometrize.bitmap.hxPixels;
 
 import hxPixels.Pixels;
+import hxPixels.Pixels.PixelFormat;
 import haxe.io.Bytes;
 
 /**
@@ -61,6 +62,16 @@ class Bitmap {
 		return bitmap;
 	}
 	
+	public static inline function createFromImageData(imageData:js.html.ImageData):Bitmap {
+		var bitmap = new Bitmap();
+		Sure.sure(imageData != null);
+		bitmap.width = imageData.width;
+		bitmap.height = imageData.height;
+		bitmap.data = hxPixels.Pixels.fromImageData(imageData);
+    bitmap.data.format = PixelFormat.ARGB;
+		return bitmap;
+	}
+  
 	/**
 	 * Gets a pixel at the given coordinate.
 	 * @param	x	The x-coordinate.
@@ -68,7 +79,7 @@ class Bitmap {
 	 * @return	The pixel color value.
 	 */
 	public inline function getPixel(x:Int, y:Int):Rgba {
-		return data.getPixel32(x, y);
+		return data.uint32Array[y * width + x]; //getPixel32(x, y);
 	}
 	
 	/**
@@ -78,7 +89,7 @@ class Bitmap {
 	 * @param	color	The color value to set at the given coordinate.
 	 */
 	public inline function setPixel(x:Int, y:Int, color:Rgba):Void {
-		data.setPixel32(x, y, color);
+		data.uint32Array[y * width + x] = cast color;// setPixel32(x, y, color);
 	}
 	
 	/**
@@ -99,7 +110,11 @@ class Bitmap {
 	 * @param	color The color to fill the bitmap with.
 	 */
 	public inline function fill(color:Rgba):Void {
-		this.data.fillRect(0, 0, width, height, color);
+		var idx:Int = 0;
+		while (idx < data.uint32Array.length) {
+			data.uint32Array.set(idx, cast color);
+			idx++;
+		}
 	}
 	
 	/**

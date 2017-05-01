@@ -61,7 +61,7 @@ class Model {
 		this.height = target.height;
 		this.target = target;
 		this.current = Bitmap.create(target.width, target.height, backgroundColor);
-		this.buffer = Bitmap.create(target.width, target.height, backgroundColor);
+		this.buffer = current.clone();
 		
 		this.score = Core.differenceFull(target, current);
 	}
